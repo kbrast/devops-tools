@@ -1,0 +1,45 @@
+# Create a deployment that defines how to run your application
+cat > deployment.yaml << EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yourapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: yourapp
+  template:
+    metadata:
+      labels:
+        app: yourapp
+    spec:
+      containers:
+      - name: yourapp
+        image: yourname/yourapp:latest
+        ports:
+        - containerPort: 3000
+EOF
+
+# Create a service that defines how to access your application
+cat > service.yaml << EOF
+apiVersion: v1
+kind: Service
+metadata:
+  name: yourapp
+spec:
+  selector:
+    app: yourapp
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
+  type: LoadBalancer
+EOF
+
+# Apply your deployment and service to the cluster
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+
+# Get the external IP address of your service
+kubectl get service yourapp

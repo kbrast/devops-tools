@@ -1,0 +1,31 @@
+# Create an inventory file that lists your servers
+cat > hosts << EOF
+[web]
+web1 ansible_host=192.168.1.10
+web2 ansible_host=192.168.1.11
+web3 ansible_host=192.168.1.12
+EOF
+
+# Create a playbook that installs and configures Docker on your servers
+cat > docker.yaml << EOF
+- hosts: web
+  become: yes
+  tasks:
+  - name: Install Docker
+    apt:
+      name: docker.io
+      state: present
+      update_cache: yes
+  - name: Start Docker
+    service:
+      name: docker
+      state: started
+  - name: Add user to Docker group
+    user:
+      name: "{{ ansible_user }}"
+      groups: docker
+      append: yes
+EOF
+
+# Run your playbook on your servers
+ansible-playbook -i hosts docker.yaml

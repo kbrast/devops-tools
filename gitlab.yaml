@@ -1,0 +1,45 @@
+# Install GitLab on your server
+sudo apt-get update
+sudo apt-get install curl openssh-server ca-certificates
+curl https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash
+sudo EXTERNAL_URL="http://localhost" apt-get install gitlab-ee
+
+# Access GitLab web interface on your browser
+http://localhost
+
+# Create a new project on GitLab
+Click on "New project" button
+Enter "yourapp" as project name
+Click on "Create project" button
+
+# Push your code to GitLab
+cd yourproject
+git remote add origin http://localhost/root/yourapp.git
+git push -u origin master
+
+# Create a pipeline on GitLab
+Click on "CI/CD" > "Pipelines" on the sidebar
+Click on "Set up CI/CD" button
+Copy and paste the following content to the editor
+
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+  stage: build
+  script:
+    - docker build -t yourname/yourapp:latest .
+
+test:
+  stage: test
+  script:
+    - docker run --rm yourname/yourapp:latest npm test
+
+deploy:
+  stage: deploy
+  script:
+    - docker push yourname/yourapp:latest
+    - kubectl apply -f deployment.yaml
+    - kubectl apply -f service.yaml

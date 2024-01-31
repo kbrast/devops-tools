@@ -1,0 +1,24 @@
+# Install Prometheus on your server
+wget https://github.com/prometheus/prometheus/releases/download/v2.28.1/prometheus-2.28.1.linux-amd64.tar.gz
+tar xzf prometheus-2.28.1.linux-amd64.tar.gz
+cd prometheus-2.28.1.linux-amd64
+
+# Create a configuration file that defines your scrape targets
+cat > prometheus.yml << EOF
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+scrape_configs:
+- job_name: 'web'
+  static_configs:
+  - targets: ['web1:3000', 'web2:3000', 'web3:3000']
+EOF
+
+# Start Prometheus on your server
+./prometheus --config.file=prometheus.yml
+
+# Access Prometheus web interface on your browser
+http://localhost:9090
+
+# Query your metrics using PromQL
+rate(http_requests_total[5m])
