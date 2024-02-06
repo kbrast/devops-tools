@@ -1,10 +1,10 @@
 # Install Terraform on your server
-wget https://releases.hashicorp.com/terraform/1.0.7/terraform_1.0.7_linux_amd64.zip
-unzip terraform_1.0.7_linux_amd64.zip
-sudo mv terraform /usr/local/bin/
+# wget https://releases.hashicorp.com/terraform/1.0.7/terraform_1.0.7_linux_amd64.zip
+# unzip terraform_1.0.7_linux_amd64.zip
+# sudo mv terraform /usr/local/bin/
 
 # Create a configuration file that defines your resources
-cat > main.tf << EOF
+# cat > main.tf << EOF
 provider "vsphere" {
   user                 = "admin@vsphere.local"
   password             = "secret"
@@ -76,16 +76,16 @@ resource "vsphere_virtual_machine" "vm" {
     }
   }
 }
-EOF
+# EOF
 
 # Initialize Terraform on your server
-terraform init
+# terraform init
 
 # Plan your infrastructure changes
-terraform plan
+# terraform plan
 
 # Apply your infrastructure changes
-terraform apply
+# terraform apply
 
 # Destroy your infrastructure
-terraform destroy
+# terraform destroy
