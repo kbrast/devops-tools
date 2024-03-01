@@ -1,0 +1,9 @@
+---
+- name: Deploy CrowdStrike Falcon Agent
+  hosts: windows
+  tasks:
+    - name: Install CrowdStrike Falcon Agent
+      win_shell: |
+        Invoke-WebRequest -Uri "https://download.crowdstrike.com/cloudconnectors/Windows/CrowdStrike_FalconSensor.exe" -OutFile "C:\Temp\CrowdStrike_FalconSensor.exe"
+        Start-Process -Wait -FilePath "C:\Temp\CrowdStrike_FalconSensor.exe" -ArgumentList "/install /quiet"
+      become: yes
